@@ -15,12 +15,18 @@ type Student struct {
 
 func main() {
 	fmt.Println("Starting server at port 8080...")
+	http.HandleFunc("/", AnonymousDataHandler)
 	http.HandleFunc("/add-student-data", AddStudentDataHandler)
 	http.HandleFunc("/fetch-student-data", FetchStudentDataHandler)
 	if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
 		fmt.Println("Error listening to the server!")
 		return
 	}
+}
+
+func AnonymousDataHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusBadRequest)
+	fmt.Fprint(w, "Invalid! Please hit a valid request!")
 }
 
 func AddStudentDataHandler(w http.ResponseWriter, r *http.Request) {
